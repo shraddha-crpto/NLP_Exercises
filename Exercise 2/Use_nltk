@@ -1,0 +1,56 @@
+import nltk
+from nltk.probability import FreqDist
+from nltk.corpus import stopwords
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+article = "The clinical and laboratory features of myocarditis are shown in Table 3 and Table S3. The presenting symptom was chest pain in 82% of cases. Vital signs on admission were generally normal; 1 patient presented with hemodynamic instability, and none required inotropic or vasopressor support or mechanical circulatory support on presentation. Electrocardiography (ECG) at presentation showed ST-segment elevation in 20 of 38 patients (53%) for whom ECG data were available on admission; the results on ECG were normal in 8 of 38 patients (21%), whereas minor abnormalities (including T-wave changes, atrial fibrillation, and nonsustained ventricular tachycardia) were detected in the rest of the patients. The median peak troponin T level was 680 ng per liter (IQR, 275 to 2075) in 41 patients with available data, and the median creatine kinase level was 487 U per liter (IQR, 230 to 1193) in 28 patients with available data."
+words = nltk.word_tokenize(article)
+stop_words = set(stopwords.words('english'))
+print("Article:\n")
+filtered_words = []
+for word in words:
+    if not word.lower() in stop_words and word.isalnum():
+        filtered_words.append(word)
+
+print("\nMost Frequent words are: \n")
+freq = FreqDist(filtered_words)
+for (key,value) in freq.most_common(3):
+    print("\'%s\' appears %d times" % (key, value))
+
+
+# my stemmer from exercise 1 
+def sentence_suffix(new_sentence):
+    if new_sentence.endswith("ing"):
+        new_sentence = new_sentence[:-3]
+        if new_sentence not in ["a", "e", "i", "o", "u"] and new_sentence[-1] == new_sentence[-2]:
+            new_sentence = new_sentence[:-1]
+        return new_sentence
+    elif new_sentence.endswith("es"):
+        new_sentence = new_sentence[:-2]
+        return new_sentence
+    elif new_sentence.endswith("s"):
+        new_sentence = new_sentence[:-1]
+        return new_sentence
+    return new_sentence
+
+porter = nltk.PorterStemmer()
+lancaster = nltk.LancasterStemmer()
+
+porter_tokens = []
+lancaster_tokens = []
+my_tokens = []
+
+for token in filtered_words:
+    porter_tokens.append(porter.stem(token))
+    lancaster_tokens.append(lancaster.stem(token))
+    my_tokens.append(sentence_suffix(token))
+
+print("\nPorterStemmer stemming:\n")
+print(porter_tokens)
+print("\nLancasterStemmer stemming:\n")
+print(lancaster_tokens)
+print("\nMy stemming function:\n")
+print(my_tokens)
+
