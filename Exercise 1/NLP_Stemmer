@@ -1,0 +1,24 @@
+#Design a simple NLP stemmer.
+
+#Define the function and iterate the string
+def sentence_suffix(new_sentence):
+    if new_sentence.endswith("ing"):
+        new_sentence = new_sentence[:-3]
+        if new_sentence not in ["a", "e", "i", "o", "u"] and new_sentence[-1] == new_sentence[-2]:
+            new_sentence = new_sentence[:-1]
+        return new_sentence
+    elif new_sentence.endswith("es"):
+        new_sentence = new_sentence[:-2]
+        return new_sentence
+    elif new_sentence.endswith("s"):
+        new_sentence = new_sentence[:-1]
+        return new_sentence
+    return new_sentence
+
+#Input the sentence
+sentence = input("Enter a sentence: ")
+
+#Split the sentence  
+new_sentence = sentence.split()
+for word in new_sentence:
+        print(sentence_suffix(word))
